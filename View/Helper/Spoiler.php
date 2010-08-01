@@ -14,12 +14,6 @@
      */
     class Hz_View_Helper_Spoiler extends Zend_View_Helper_Abstract {
 
-        /**
-         *
-         * @var string
-         */
-        private $_replacement;
-
         const STANDARD_REPLACEMENT = 'Reveal spoiler';
 
         /**
@@ -33,17 +27,24 @@
             }
             $js = <<<SCRIPT
        $(function() {
-           $('<span class="spoiler_placeholder">$this->_replacement</span>')
-                .insertBefore('.spoiler')
-                .click(function() {
-                    $(this)
-                        .fadeOut(200)
-                        .next()
-                        .fadeIn(600);
-
-                })
-                .next()
-                    .hide();
+           $('.spoiler').each(function() {
+                var spoiler = $(this);
+                var replacement = spoiler.attr('title');
+                spoiler
+                    .before('<span class="spoiler_placeholder">'+replacement+'</span>')
+                    .hide()
+                    .prev()
+                        .click(function(){
+                            var replacement = $(this);
+                            replacement
+                                .fadeOut(200)
+                                .next()
+                                    .attr('title', '')
+                                    .fadeIn(600)
+                                    .prev()
+                                .remove();
+                        });
+           });
        });
 SCRIPT;
             $this->view->headScript()->appendScript($js);
@@ -55,8 +56,8 @@ SCRIPT;
          * @param string $content
          * @return string
          */
-        private function _applySpoiler($content) {
-            return '<span class="spoiler">'.$content.'</span>';
+        private function _applySpoiler($content, $replacement) {
+            return '<span class="spoiler" title="'.$replacement.'">'.$content.'</span>';
         }
 
         /**
@@ -65,9 +66,8 @@ SCRIPT;
          * @return string
          */
         public function spoiler($content, $replacement = self::STANDARD_REPLACEMENT) {
-            $this->_replacement = (string) $replacement;
             $this->_appendScript();
-            return $this->_applySpoiler($content);
+            return $this->_applySpoiler($content, $replacement);
         }
 
     }
