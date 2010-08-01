@@ -8,6 +8,8 @@
      *
      * Requires jQuery to be loaded before
      *
+     * Based on the technique found on @see http://css-tricks.com/examples/SpoilerRevealer/
+     *
      * @author chelmertz
      */
     class Hz_View_Helper_Spoiler extends Zend_View_Helper_Abstract {
