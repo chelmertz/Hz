@@ -1,6 +1,14 @@
 <?php
 
 /**
+ * Inserts the HTML element <acronym> at appropriate places
+ * in your text.
+ * Features:
+ * 	- detection is case insensitive, 'omg' will match your
+ *	ruleset for 'OMG'
+ *	- optional delimiters matches your rulesets, 'o.m.g.'
+ *	or 'o m g' will match your defined 'omg'
+ *
  * @author Carl Helmertz <helmertz@gmail.com>
  */
 class Hz_Filter_Acronym implements Zend_Filter_Interface {
